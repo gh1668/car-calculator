@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Picker } from 'react-native';
 import MoneyButton from '../Button/MoneyButton'
 
 export default class HomeScreen extends Component {
@@ -11,6 +11,7 @@ export default class HomeScreen extends Component {
       installmentDay: '0',
       period: '0',
       rate: '0',
+      way: '0',
     }
   }
   addpreMoney = (money) => {
@@ -21,15 +22,15 @@ export default class HomeScreen extends Component {
   }
 
   render() {
-   
+
     return (
       <View style={styles.container}>
         <View style={styles.title}>
-          <Text style={{ fontSize: 20, paddingBottom: 20 }}>자동차할부계산기</Text>
+          <Text style={{ fontSize: 20, paddingBottom: 30, paddingLeft: 10, }}>자동차할부계산기</Text>
           <View style={{ width: "100%", borderBottomWidth: 0.5, borderColor: '#444' }} />
         </View>
         <View style={styles.content}>
-        <View style={styles.elem}>
+          <View style={styles.elem}>
             <View style={styles.userInfo}>
               <Text style={styles.name}>할부원금</Text>
             </View>
@@ -37,7 +38,7 @@ export default class HomeScreen extends Component {
               <TextInput
                 style={styles.inputText}
                 onChangeText={(totalmoney) => this.setState({ totalmoney })}
-                value={this.state.totalmoney.toString().replace(/,/g,"").replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                value={this.state.totalmoney.toString().replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
               />
             </View>
             <View style={styles.userComment}>
@@ -50,7 +51,7 @@ export default class HomeScreen extends Component {
             <MoneyButton title={'100만원'} onPress={() => this.addTotalMoney(1000000)} />
             <MoneyButton title={'10만원'} onPress={() => this.addTotalMoney(100000)} />
             <MoneyButton title={'1만원'} onPress={() => this.addTotalMoney(10000)} />
-            <MoneyButton title={'정정'} onPress={() => this.setState({totalmoney : 0})}/>
+            <MoneyButton title={'정정'} onPress={() => this.setState({ totalmoney: 0 })} />
           </View>
           <View style={styles.elem}>
             <View style={styles.userInfo}>
@@ -60,7 +61,7 @@ export default class HomeScreen extends Component {
               <TextInput
                 style={styles.inputText}
                 onChangeText={(preMoney) => this.setState({ preMoney })}
-                value={this.state.preMoney.toString().replace(/,/g,"").replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                value={this.state.preMoney.toString().replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
               />
             </View>
             <View style={styles.userComment}>
@@ -73,7 +74,7 @@ export default class HomeScreen extends Component {
             <MoneyButton title={'100만원'} onPress={() => this.addpreMoney(1000000)} />
             <MoneyButton title={'10만원'} onPress={() => this.addpreMoney(100000)} />
             <MoneyButton title={'1만원'} onPress={() => this.addpreMoney(10000)} />
-            <MoneyButton title={'정정'} onPress={() => this.setState({preMoney : 0})}/>
+            <MoneyButton title={'정정'} onPress={() => this.setState({ preMoney: 0 })} />
           </View>
           <View style={styles.elem}>
             <View style={styles.userInfo}>
@@ -125,18 +126,23 @@ export default class HomeScreen extends Component {
               <Text style={styles.name}>계산방식</Text>
             </View>
             <View style={styles.inputComment}>
-              <TextInput
-                style={styles.inputText}
-                onChangeText={(rate) => this.setState({ rate })}
-                value={this.state.rate}
-              />
+              <Picker
+                selectedValue={this.state.way}
+                style={{ height: 50, width: 200 }}
+                onValueChange={(itemValue, itemIndex) =>
+                  this.setState({ way: itemValue })
+                }>
+                <Picker.Item label="원리금균등분할상환" value="0" />
+                <Picker.Item label="원금균등분할상환" value="1" />
+                <Picker.Item label="원금만기일시상환" value="2" />
+              </Picker>
             </View>
             <View style={styles.userComment}>
 
             </View>
           </View>
         </View>
-      
+
         <View style={styles.footer}>
           <Button
             title="입력"
@@ -149,6 +155,7 @@ export default class HomeScreen extends Component {
                 period: this.state.period,
                 rate: this.state.rate,
                 itemId: this.state.inputmoney,
+                way: this.state.way,
               });
             }}
           />
